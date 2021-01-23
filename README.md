@@ -21,7 +21,7 @@ We can use the link http://127.0.0.1:8000/event/         - (GET/POST) to either 
 
 We can use the link http://127.0.0.1:8000/event/<pk>     - (GET/PUT/DELETE)where pk is the unique id of a particular event for further details
 
-We can use the link http://127.0.0.1:8000/users/         - (GET/POST) to either sign yourself for a particular event or to see which users are attending which event
+We can use the link http://127.0.0.1:8000/users/         - (GET/POST) to either sign yourself for a particular event or to see which users are attending which event (note a user cannot regiter for more than 3 events )
 
 We can use the link http://127.0.0.1:8000/users/<pk>     - (GET/PUT/DELETE)where pk is the unique id of a particular user for further details
 
