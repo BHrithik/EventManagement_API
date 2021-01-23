@@ -107,15 +107,19 @@ def get_users_list(request):
 def post_users_list(request):
     serializers = UserSerializer(data=request.data)
     if serializers.is_valid():
-        for i in request.data['userEvents']:  
+        c=0
+        for i in request.data['userEvents']:
+            c=c+1
             a=Event.objects.get(eventID=i)
-            count=a.vacancy
+            count=a.eventVacancies
             if count>0:
                 count=count-1
-                a.vacancy=count
+                a.eventVacancies=count
                 a.save()
             else:
                 return Response({"error": "Event capacity is full"}, status=status.HTTP_204_NO_CONTENT)
+            if c>3:
+                return Response({"userEvents":"User cannot take part in more than 3 events"},status=status.HTTP_204_NO_CONTENT)
         serializers.save()
         return Response(serializers.data,status=status.HTTP_201_CREATED)
     return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
@@ -128,8 +132,6 @@ def user_details(request,pk):
         user = User.objects.get(userID=pk)
     except User.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    if user.email != str(request.user):
-        return Response({'response':'you dont have permission to view/edit'}) 
     if request.method == 'GET':
         return get_request_user_details(request,user)
     elif request.method == 'PUT':
@@ -153,7 +155,7 @@ def delete_request_user_details(request,user):
     event=User.userEvents.values_list('pk', flat=True)
     for i in event.iterator():
         a=Event.objects.get(eventID=i)
-        count=a.vacancy
+        count=a.eventVacancies
         count=count+1
         a.eventVacancies=count
         a.save()

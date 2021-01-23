@@ -56,6 +56,8 @@ class Event(models.Model):
     eventVacancies = models.IntegerField()
     def __str__(self):
         return self.eventName
+    # class Meta:
+    #     unique_together=[['eventName','date']]
 
 class User(models.Model):   
     userID   = models.UUIDField( primary_key = True, default = uuid.uuid4,editable = False)             
@@ -63,7 +65,7 @@ class User(models.Model):
     email           = models.EmailField(max_length=100)
     userEvents      = models.ManyToManyField(Event)
     def __str__(self):
-        return self.username   
+        return self.userName   
 
 @receiver(post_save,sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created= False, **kwargs):
